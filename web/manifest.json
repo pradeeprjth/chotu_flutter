@@ -1,11 +1,11 @@
 {
-    "name": "chotu_app",
-    "short_name": "chotu_app",
+    "name": "Chotu",
+    "short_name": "Chotu",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Chotu - Instant delivery app for groceries and household items",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/models/user_model.dart';
 import '../../../core/services/auth_service.dart';
+import '../../../core/providers/notification_provider.dart';
 
 // Auth state model
 class AuthState {
@@ -49,8 +50,9 @@ class AuthState {
 // Auth provider
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthService _authService;
+  final Ref _ref;
 
-  AuthNotifier(this._authService) : super(AuthState.initial());
+  AuthNotifier(this._authService, this._ref) : super(AuthState.initial());
 
   String _getErrorMessage(dynamic error) {
     if (error is DioException) {
@@ -98,6 +100,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
         refreshToken: response.refreshToken,
         isLoading: false,
       );
+
+      // Subscribe to role-based notification topics
+      _subscribeToNotificationTopics(response.user.role);
+
       return true;
     } catch (e) {
       state = state.copyWith(
@@ -130,6 +136,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
         refreshToken: response.refreshToken,
         isLoading: false,
       );
+
+      // Subscribe to role-based notification topics
+      _subscribeToNotificationTopics(response.user.role);
+
       return true;
     } catch (e) {
       state = state.copyWith(
@@ -140,7 +150,25 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  /// Subscribe to notification topics based on user role
+  void _subscribeToNotificationTopics(String role) {
+    try {
+      final notifier = _ref.read(notificationProvider.notifier);
+      notifier.subscribeToRoleTopics(role);
+    } catch (e) {
+      // Ignore notification errors - don't block auth flow
+    }
+  }
+
   Future<void> logout() async {
+    // Remove FCM token and unsubscribe from topics
+    try {
+      final notifier = _ref.read(notificationProvider.notifier);
+      await notifier.onLogout();
+    } catch (e) {
+      // Ignore notification errors
+    }
+
     await _authService.logout();
     state = AuthState.initial();
   }
@@ -178,5 +206,5 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final authService = ref.watch(authServiceProvider);
-  return AuthNotifier(authService);
+  return AuthNotifier(authService, ref);
 });

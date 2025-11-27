@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'colors.dart';
 
 /// Typography scale for the Chotu app
+/// NOTE: Colors are NOT hardcoded in these styles to support dark mode.
+/// Use Theme.of(context).textTheme for automatic dark mode support,
+/// or wrap with AppTypography.adaptive() for theme-aware colors.
 class AppTypography {
   AppTypography._();
 
@@ -14,7 +17,6 @@ class AppTypography {
     fontWeight: FontWeight.w400,
     letterSpacing: -0.25,
     height: 1.12,
-    color: AppColors.textPrimary,
   );
 
   static const TextStyle displayMedium = TextStyle(
@@ -22,7 +24,6 @@ class AppTypography {
     fontWeight: FontWeight.w400,
     letterSpacing: 0,
     height: 1.16,
-    color: AppColors.textPrimary,
   );
 
   static const TextStyle displaySmall = TextStyle(
@@ -30,7 +31,6 @@ class AppTypography {
     fontWeight: FontWeight.w400,
     letterSpacing: 0,
     height: 1.22,
-    color: AppColors.textPrimary,
   );
 
   // Headline Styles (Section titles)
@@ -39,7 +39,6 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: 0,
     height: 1.25,
-    color: AppColors.textPrimary,
   );
 
   static const TextStyle headlineMedium = TextStyle(
@@ -47,7 +46,6 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: 0,
     height: 1.29,
-    color: AppColors.textPrimary,
   );
 
   static const TextStyle headlineSmall = TextStyle(
@@ -55,7 +53,6 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: 0,
     height: 1.33,
-    color: AppColors.textPrimary,
   );
 
   // Title Styles (Card titles, list headers)
@@ -64,7 +61,6 @@ class AppTypography {
     fontWeight: FontWeight.w500,
     letterSpacing: 0,
     height: 1.27,
-    color: AppColors.textPrimary,
   );
 
   static const TextStyle titleMedium = TextStyle(
@@ -72,7 +68,6 @@ class AppTypography {
     fontWeight: FontWeight.w500,
     letterSpacing: 0.15,
     height: 1.50,
-    color: AppColors.textPrimary,
   );
 
   static const TextStyle titleSmall = TextStyle(
@@ -80,7 +75,6 @@ class AppTypography {
     fontWeight: FontWeight.w500,
     letterSpacing: 0.1,
     height: 1.43,
-    color: AppColors.textPrimary,
   );
 
   // Body Styles (Main content)
@@ -89,7 +83,6 @@ class AppTypography {
     fontWeight: FontWeight.w400,
     letterSpacing: 0.5,
     height: 1.50,
-    color: AppColors.textPrimary,
   );
 
   static const TextStyle bodyMedium = TextStyle(
@@ -97,7 +90,6 @@ class AppTypography {
     fontWeight: FontWeight.w400,
     letterSpacing: 0.25,
     height: 1.43,
-    color: AppColors.textPrimary,
   );
 
   static const TextStyle bodySmall = TextStyle(
@@ -105,7 +97,6 @@ class AppTypography {
     fontWeight: FontWeight.w400,
     letterSpacing: 0.4,
     height: 1.33,
-    color: AppColors.textSecondary,
   );
 
   // Label Styles (Buttons, chips, input labels)
@@ -114,7 +105,6 @@ class AppTypography {
     fontWeight: FontWeight.w500,
     letterSpacing: 0.1,
     height: 1.43,
-    color: AppColors.textPrimary,
   );
 
   static const TextStyle labelMedium = TextStyle(
@@ -122,7 +112,6 @@ class AppTypography {
     fontWeight: FontWeight.w500,
     letterSpacing: 0.5,
     height: 1.33,
-    color: AppColors.textPrimary,
   );
 
   static const TextStyle labelSmall = TextStyle(
@@ -130,7 +119,6 @@ class AppTypography {
     fontWeight: FontWeight.w500,
     letterSpacing: 0.5,
     height: 1.45,
-    color: AppColors.textSecondary,
   );
 
   // Custom Styles for Chotu App
@@ -139,7 +127,6 @@ class AppTypography {
     fontWeight: FontWeight.w500,
     letterSpacing: 0.1,
     height: 1.3,
-    color: AppColors.textPrimary,
   );
 
   static const TextStyle productPrice = TextStyle(
@@ -179,7 +166,6 @@ class AppTypography {
     fontWeight: FontWeight.w500,
     letterSpacing: 0.1,
     height: 1.3,
-    color: AppColors.textPrimary,
   );
 
   static const TextStyle sectionTitle = TextStyle(
@@ -187,7 +173,6 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: 0,
     height: 1.3,
-    color: AppColors.textPrimary,
   );
 
   static const TextStyle appBarTitle = TextStyle(
@@ -202,7 +187,6 @@ class AppTypography {
     fontWeight: FontWeight.w500,
     letterSpacing: 0.1,
     height: 1.3,
-    color: AppColors.textPrimary,
   );
 
   static const TextStyle orderTotal = TextStyle(
@@ -210,7 +194,6 @@ class AppTypography {
     fontWeight: FontWeight.w700,
     letterSpacing: 0,
     height: 1.2,
-    color: AppColors.textPrimary,
   );
 
   // Helper for secondary text color
@@ -224,23 +207,23 @@ class AppTypography {
   }
 }
 
-/// Text theme for Material theme
+/// Light text theme for Material theme
 TextTheme createTextTheme() {
-  return const TextTheme(
-    displayLarge: AppTypography.displayLarge,
-    displayMedium: AppTypography.displayMedium,
-    displaySmall: AppTypography.displaySmall,
-    headlineLarge: AppTypography.headlineLarge,
-    headlineMedium: AppTypography.headlineMedium,
-    headlineSmall: AppTypography.headlineSmall,
-    titleLarge: AppTypography.titleLarge,
-    titleMedium: AppTypography.titleMedium,
-    titleSmall: AppTypography.titleSmall,
-    bodyLarge: AppTypography.bodyLarge,
-    bodyMedium: AppTypography.bodyMedium,
-    bodySmall: AppTypography.bodySmall,
-    labelLarge: AppTypography.labelLarge,
-    labelMedium: AppTypography.labelMedium,
-    labelSmall: AppTypography.labelSmall,
+  return TextTheme(
+    displayLarge: AppTypography.displayLarge.copyWith(color: AppColors.textPrimary),
+    displayMedium: AppTypography.displayMedium.copyWith(color: AppColors.textPrimary),
+    displaySmall: AppTypography.displaySmall.copyWith(color: AppColors.textPrimary),
+    headlineLarge: AppTypography.headlineLarge.copyWith(color: AppColors.textPrimary),
+    headlineMedium: AppTypography.headlineMedium.copyWith(color: AppColors.textPrimary),
+    headlineSmall: AppTypography.headlineSmall.copyWith(color: AppColors.textPrimary),
+    titleLarge: AppTypography.titleLarge.copyWith(color: AppColors.textPrimary),
+    titleMedium: AppTypography.titleMedium.copyWith(color: AppColors.textPrimary),
+    titleSmall: AppTypography.titleSmall.copyWith(color: AppColors.textPrimary),
+    bodyLarge: AppTypography.bodyLarge.copyWith(color: AppColors.textPrimary),
+    bodyMedium: AppTypography.bodyMedium.copyWith(color: AppColors.textPrimary),
+    bodySmall: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
+    labelLarge: AppTypography.labelLarge.copyWith(color: AppColors.textPrimary),
+    labelMedium: AppTypography.labelMedium.copyWith(color: AppColors.textPrimary),
+    labelSmall: AppTypography.labelSmall.copyWith(color: AppColors.textSecondary),
   );
 }

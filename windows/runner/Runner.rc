@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.chotu" "\0"
-            VALUE "FileDescription", "chotu_app" "\0"
+            VALUE "CompanyName", "Chotu" "\0"
+            VALUE "FileDescription", "Chotu - Instant delivery app" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "chotu_app" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2025 com.chotu. All rights reserved." "\0"
-            VALUE "OriginalFilename", "chotu_app.exe" "\0"
-            VALUE "ProductName", "chotu_app" "\0"
+            VALUE "InternalName", "Chotu" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2025 Chotu. All rights reserved." "\0"
+            VALUE "OriginalFilename", "Chotu.exe" "\0"
+            VALUE "ProductName", "Chotu" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -1,4 +1,4 @@
-package com.chotu.chotu_app
+package com.chotu.chotu
 
 import io.flutter.embedding.android.FlutterActivity
 

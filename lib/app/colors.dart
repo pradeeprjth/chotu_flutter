@@ -134,3 +134,26 @@ extension AppColorScheme on ColorScheme {
       ? AppColors.borderDark
       : AppColors.borderLight;
 }
+
+/// Extension on BuildContext for easy access to theme-aware colors
+extension ThemeColors on BuildContext {
+  bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
+
+  /// Primary text color (adapts to dark mode)
+  Color get textPrimary => isDarkMode ? AppColors.textOnDark : AppColors.textPrimary;
+
+  /// Secondary text color (adapts to dark mode)
+  Color get textSecondary => isDarkMode ? AppColors.textOnDarkSecondary : AppColors.textSecondary;
+
+  /// Tertiary text color (adapts to dark mode)
+  Color get textTertiary => isDarkMode ? AppColors.grey500 : AppColors.textTertiary;
+
+  /// Surface color for containers (adapts to dark mode)
+  Color get surfaceColor => isDarkMode ? AppColors.surfaceDark : AppColors.surfaceLight;
+
+  /// Subtle background for items (adapts to dark mode)
+  Color get subtleSurface => isDarkMode ? AppColors.grey800 : AppColors.grey100;
+
+  /// Border color (adapts to dark mode)
+  Color get borderColor => isDarkMode ? AppColors.borderDark : AppColors.borderLight;
+}

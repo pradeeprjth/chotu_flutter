@@ -197,7 +197,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/admin/orders',
-        builder: (context, state) => const AdminOrdersScreen(),
+        builder: (context, state) {
+          final status = state.uri.queryParameters['status'];
+          return AdminOrdersScreen(initialStatus: status);
+        },
       ),
       GoRoute(
         path: '/admin/orders/:id',

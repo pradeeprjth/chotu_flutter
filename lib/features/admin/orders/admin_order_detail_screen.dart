@@ -83,10 +83,10 @@ class _AdminOrderDetailScreenState extends ConsumerState<AdminOrderDetailScreen>
         children: [
           Icon(Icons.error_outline, size: 64, color: AppColors.grey400),
           const SizedBox(height: AppSpacing.md),
-          Text('Order not found', style: AppTypography.titleMedium),
+          Text('Order not found', style: AppTypography.titleMedium.copyWith(color: context.textPrimary)),
           if (error != null) ...[
             const SizedBox(height: AppSpacing.sm),
-            Text(error, style: AppTypography.bodySmall),
+            Text(error, style: AppTypography.bodySmall.copyWith(color: context.textSecondary)),
           ],
           const SizedBox(height: AppSpacing.lg),
           ElevatedButton(
@@ -250,7 +250,7 @@ class _AdminOrderDetailScreenState extends ConsumerState<AdminOrderDetailScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Quick Actions', style: AppTypography.titleSmall),
+          Text('Quick Actions', style: AppTypography.titleSmall.copyWith(color: context.textPrimary)),
           const SizedBox(height: AppSpacing.md),
           Wrap(
             spacing: AppSpacing.sm,
@@ -367,25 +367,26 @@ class _AdminOrderDetailScreenState extends ConsumerState<AdminOrderDetailScreen>
     // Check if order is in an assignable status
     final assignableStatuses = ['CONFIRMED', 'PREPARING'];
     final canAssign = assignableStatuses.contains(order.orderStatus);
+    final isDark = context.isDarkMode;
 
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
         color: canAssign
             ? AppColors.warning.withValues(alpha: 0.1)
-            : AppColors.grey100,
+            : (isDark ? AppColors.grey800 : AppColors.grey100),
         borderRadius: BorderRadius.circular(AppRadius.card),
         border: Border.all(
           color: canAssign
               ? AppColors.warning.withValues(alpha: 0.3)
-              : AppColors.grey300,
+              : (isDark ? AppColors.grey700 : AppColors.grey300),
         ),
       ),
       child: Row(
         children: [
           Icon(
             canAssign ? Icons.warning_amber : Icons.info_outline,
-            color: canAssign ? AppColors.warning : AppColors.textSecondary,
+            color: canAssign ? AppColors.warning : context.textSecondary,
           ),
           const SizedBox(width: AppSpacing.md),
           Expanded(
@@ -396,6 +397,7 @@ class _AdminOrderDetailScreenState extends ConsumerState<AdminOrderDetailScreen>
                   'No Delivery Partner Assigned',
                   style: AppTypography.labelMedium.copyWith(
                     fontWeight: FontWeight.bold,
+                    color: context.textPrimary,
                   ),
                 ),
                 const SizedBox(height: AppSpacing.xxs),
@@ -404,7 +406,7 @@ class _AdminOrderDetailScreenState extends ConsumerState<AdminOrderDetailScreen>
                       ? 'Assign a delivery partner to proceed'
                       : 'Confirm the order first to assign a delivery partner',
                   style: AppTypography.labelSmall.copyWith(
-                    color: AppColors.textSecondary,
+                    color: context.textSecondary,
                   ),
                 ),
               ],
@@ -413,10 +415,10 @@ class _AdminOrderDetailScreenState extends ConsumerState<AdminOrderDetailScreen>
           ElevatedButton(
             onPressed: canAssign ? () => _showAssignPartnerDialog(order.id) : null,
             style: ElevatedButton.styleFrom(
-              backgroundColor: canAssign ? AppColors.warning : AppColors.grey300,
+              backgroundColor: canAssign ? AppColors.warning : (isDark ? AppColors.grey700 : AppColors.grey300),
               foregroundColor: Colors.white,
-              disabledBackgroundColor: AppColors.grey300,
-              disabledForegroundColor: AppColors.textSecondary,
+              disabledBackgroundColor: isDark ? AppColors.grey700 : AppColors.grey300,
+              disabledForegroundColor: context.textSecondary,
             ),
             child: const Text('Assign'),
           ),
@@ -444,7 +446,7 @@ class _AdminOrderDetailScreenState extends ConsumerState<AdminOrderDetailScreen>
             children: [
               Icon(icon, size: 18, color: AppColors.primary),
               const SizedBox(width: AppSpacing.sm),
-              Text(title, style: AppTypography.titleSmall),
+              Text(title, style: AppTypography.titleSmall.copyWith(color: context.textPrimary)),
             ],
           ),
           const Divider(height: AppSpacing.lg),
@@ -455,6 +457,11 @@ class _AdminOrderDetailScreenState extends ConsumerState<AdminOrderDetailScreen>
   }
 
   Widget _buildOrderItemsCard(AdminOrder order) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? AppColors.textOnDark : AppColors.textPrimary;
+    final secondaryTextColor = isDark ? AppColors.textOnDarkSecondary : AppColors.textSecondary;
+    final surfaceColor = isDark ? AppColors.grey800 : AppColors.grey100;
+
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
@@ -469,7 +476,7 @@ class _AdminOrderDetailScreenState extends ConsumerState<AdminOrderDetailScreen>
             children: [
               Icon(Icons.shopping_bag, size: 18, color: AppColors.primary),
               const SizedBox(width: AppSpacing.sm),
-              Text('Order Items (${order.items.length})', style: AppTypography.titleSmall),
+              Text('Order Items (${order.items.length})', style: AppTypography.titleSmall.copyWith(color: textColor)),
             ],
           ),
           const Divider(height: AppSpacing.lg),
@@ -491,7 +498,7 @@ class _AdminOrderDetailScreenState extends ConsumerState<AdminOrderDetailScreen>
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: AppColors.grey100,
+                      color: surfaceColor,
                       borderRadius: BorderRadius.circular(AppRadius.sm),
                       image: imageUrl != null
                           ? DecorationImage(
@@ -513,12 +520,13 @@ class _AdminOrderDetailScreenState extends ConsumerState<AdminOrderDetailScreen>
                           productName,
                           style: AppTypography.labelMedium.copyWith(
                             fontWeight: FontWeight.w600,
+                            color: textColor,
                           ),
                         ),
                         Text(
                           '$quantity x \u20B9${price.toStringAsFixed(0)}',
                           style: AppTypography.labelSmall.copyWith(
-                            color: AppColors.textSecondary,
+                            color: secondaryTextColor,
                           ),
                         ),
                       ],
@@ -528,6 +536,7 @@ class _AdminOrderDetailScreenState extends ConsumerState<AdminOrderDetailScreen>
                     '\u20B9${total.toStringAsFixed(0)}',
                     style: AppTypography.labelMedium.copyWith(
                       fontWeight: FontWeight.bold,
+                      color: textColor,
                     ),
                   ),
                 ],
@@ -554,7 +563,7 @@ class _AdminOrderDetailScreenState extends ConsumerState<AdminOrderDetailScreen>
             children: [
               Icon(Icons.payments, size: 18, color: AppColors.primary),
               const SizedBox(width: AppSpacing.sm),
-              Text('Payment Details', style: AppTypography.titleSmall),
+              Text('Payment Details', style: AppTypography.titleSmall.copyWith(color: context.textPrimary)),
             ],
           ),
           const Divider(height: AppSpacing.lg),
@@ -565,7 +574,7 @@ class _AdminOrderDetailScreenState extends ConsumerState<AdminOrderDetailScreen>
             children: [
               Text(
                 'Payment Method',
-                style: AppTypography.labelSmall.copyWith(color: AppColors.textSecondary),
+                style: AppTypography.labelSmall.copyWith(color: context.textSecondary),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(
@@ -573,13 +582,14 @@ class _AdminOrderDetailScreenState extends ConsumerState<AdminOrderDetailScreen>
                   vertical: AppSpacing.xxs,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.grey100,
+                  color: context.subtleSurface,
                   borderRadius: BorderRadius.circular(AppRadius.xs),
                 ),
                 child: Text(
                   order.paymentMethod,
                   style: AppTypography.labelSmall.copyWith(
                     fontWeight: FontWeight.w600,
+                    color: context.textPrimary,
                   ),
                 ),
               ),
@@ -608,7 +618,7 @@ class _AdminOrderDetailScreenState extends ConsumerState<AdminOrderDetailScreen>
                 children: [
                   Icon(Icons.note, size: 18, color: AppColors.primary),
                   const SizedBox(width: AppSpacing.sm),
-                  Text('Order Notes', style: AppTypography.titleSmall),
+                  Text('Order Notes', style: AppTypography.titleSmall.copyWith(color: context.textPrimary)),
                 ],
               ),
               IconButton(
@@ -650,8 +660,8 @@ class _AdminOrderDetailScreenState extends ConsumerState<AdminOrderDetailScreen>
                   : _notesController.text,
               style: AppTypography.bodySmall.copyWith(
                 color: _notesController.text.isEmpty
-                    ? AppColors.textTertiary
-                    : AppColors.textPrimary,
+                    ? context.textTertiary
+                    : context.textPrimary,
                 fontStyle: _notesController.text.isEmpty ? FontStyle.italic : null,
               ),
             ),
@@ -675,7 +685,7 @@ class _AdminOrderDetailScreenState extends ConsumerState<AdminOrderDetailScreen>
             children: [
               Icon(Icons.timeline, size: 18, color: AppColors.primary),
               const SizedBox(width: AppSpacing.sm),
-              Text('Order Timeline', style: AppTypography.titleSmall),
+              Text('Order Timeline', style: AppTypography.titleSmall.copyWith(color: context.textPrimary)),
             ],
           ),
           const SizedBox(height: AppSpacing.md),
@@ -960,14 +970,16 @@ class _InfoRow extends StatelessWidget {
               child: Text(
                 label,
                 style: AppTypography.labelSmall.copyWith(
-                  color: AppColors.textSecondary,
+                  color: context.textSecondary,
                 ),
               ),
             ),
           Expanded(
             child: Text(
               value,
-              style: AppTypography.bodySmall,
+              style: AppTypography.bodySmall.copyWith(
+                color: context.textPrimary,
+              ),
             ),
           ),
         ],
@@ -999,14 +1011,14 @@ class _PaymentRow extends StatelessWidget {
           Text(
             label,
             style: isBold
-                ? AppTypography.labelMedium.copyWith(fontWeight: FontWeight.bold)
-                : AppTypography.labelSmall.copyWith(color: AppColors.textSecondary),
+                ? AppTypography.labelMedium.copyWith(fontWeight: FontWeight.bold, color: context.textPrimary)
+                : AppTypography.labelSmall.copyWith(color: context.textSecondary),
           ),
           Text(
             value,
             style: isBold
-                ? AppTypography.titleSmall.copyWith(fontWeight: FontWeight.bold)
-                : AppTypography.labelMedium.copyWith(color: valueColor),
+                ? AppTypography.titleSmall.copyWith(fontWeight: FontWeight.bold, color: context.textPrimary)
+                : AppTypography.labelMedium.copyWith(color: valueColor ?? context.textPrimary),
           ),
         ],
       ),
@@ -1031,6 +1043,10 @@ class _TimelineItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = context.isDarkMode;
+    final inactiveColor = isDark ? AppColors.grey600 : AppColors.grey300;
+    final inactiveLineColor = isDark ? AppColors.grey700 : AppColors.grey200;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1041,9 +1057,9 @@ class _TimelineItem extends StatelessWidget {
               height: 16,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: isCompleted ? AppColors.success : AppColors.grey300,
+                color: isCompleted ? AppColors.success : inactiveColor,
                 border: Border.all(
-                  color: isCompleted ? AppColors.success : AppColors.grey300,
+                  color: isCompleted ? AppColors.success : inactiveColor,
                   width: 2,
                 ),
               ),
@@ -1055,7 +1071,7 @@ class _TimelineItem extends StatelessWidget {
               Container(
                 width: 2,
                 height: 30,
-                color: isCompleted ? AppColors.success : AppColors.grey200,
+                color: isCompleted ? AppColors.success : inactiveLineColor,
               ),
           ],
         ),
@@ -1068,14 +1084,14 @@ class _TimelineItem extends StatelessWidget {
                 title,
                 style: AppTypography.labelMedium.copyWith(
                   fontWeight: isCompleted ? FontWeight.w600 : FontWeight.normal,
-                  color: isCompleted ? AppColors.textPrimary : AppColors.textTertiary,
+                  color: isCompleted ? context.textPrimary : context.textTertiary,
                 ),
               ),
               if (time != null)
                 Text(
                   time!,
                   style: AppTypography.labelSmall.copyWith(
-                    color: AppColors.textSecondary,
+                    color: context.textSecondary,
                   ),
                 ),
               if (!isLast) const SizedBox(height: AppSpacing.md),

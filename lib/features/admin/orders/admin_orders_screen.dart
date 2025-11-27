@@ -14,7 +14,9 @@ import '../../../app/design_tokens.dart';
 final showFiltersProvider = StateProvider<bool>((ref) => false);
 
 class AdminOrdersScreen extends ConsumerStatefulWidget {
-  const AdminOrdersScreen({super.key});
+  final String? initialStatus;
+
+  const AdminOrdersScreen({super.key, this.initialStatus});
 
   @override
   ConsumerState<AdminOrdersScreen> createState() => _AdminOrdersScreenState();
@@ -24,13 +26,45 @@ class _AdminOrdersScreenState extends ConsumerState<AdminOrdersScreen> with Sing
   late TabController _tabController;
   final TextEditingController _searchController = TextEditingController();
 
+  // Map status to tab index
+  int _getTabIndexForStatus(String? status) {
+    switch (status) {
+      case 'PLACED':
+        return 1;
+      case 'CONFIRMED':
+        return 2;
+      case 'PREPARING':
+        return 3;
+      case 'OUT_FOR_DELIVERY':
+        return 4;
+      case 'DELIVERED':
+        return 5;
+      case 'CANCELLED':
+        return 6;
+      case 'PENDING': // Alias for PLACED
+        return 1;
+      default:
+        return 0; // All orders
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 7, vsync: this);
+    final initialIndex = _getTabIndexForStatus(widget.initialStatus);
+    _tabController = TabController(length: 7, vsync: this, initialIndex: initialIndex);
 
     // Listen for tab changes to trigger server-side filtering
     _tabController.addListener(_onTabChanged);
+
+    // If initial status is provided, filter immediately
+    if (widget.initialStatus != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final statuses = [null, 'PLACED', 'CONFIRMED', 'PREPARING', 'OUT_FOR_DELIVERY', 'DELIVERED', 'CANCELLED'];
+        final status = statuses[initialIndex];
+        ref.read(adminOrdersProvider.notifier).filterByStatus(status);
+      });
+    }
   }
 
   void _onTabChanged() {
