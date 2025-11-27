@@ -998,7 +998,6 @@ class _PaymentRow extends StatelessWidget {
     required this.label,
     required this.value,
     this.isBold = false,
-    this.valueColor,
   });
 
   @override

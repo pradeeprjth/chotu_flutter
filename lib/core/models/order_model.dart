@@ -1,5 +1,4 @@
 import 'user_model.dart';
-import 'product_model.dart';
 
 class Order {
   final String id;

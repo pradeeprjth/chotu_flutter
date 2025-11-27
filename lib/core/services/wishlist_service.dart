@@ -34,9 +34,7 @@ class WishlistService {
 
   Future<void> removeFromWishlist(String productId) async {
     try {
-      await _apiClient.post('/wishlist/remove', data: {
-        'productId': productId,
-      });
+      await _apiClient.delete('/wishlist/$productId');
     } catch (e) {
       rethrow;
     }

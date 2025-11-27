@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../auth/providers/auth_provider.dart';
+import '../../../core/api/cache_config.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -111,6 +112,54 @@ class ProfileScreen extends ConsumerWidget {
                         applicationName: 'Chotu',
                         applicationVersion: '1.0.0',
                         applicationLegalese: '© 2024 Chotu. All rights reserved.',
+                      );
+                    },
+                  ),
+                  _ProfileMenuItem(
+                    icon: Icons.cleaning_services_outlined,
+                    title: 'Clear Cache',
+                    subtitle: 'Free up storage space',
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (dialogContext) => AlertDialog(
+                          title: const Text('Clear Cache'),
+                          content: const Text(
+                            'This will clear all cached data. The app may load slower on the next use.',
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(dialogContext),
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                Navigator.pop(dialogContext);
+                                try {
+                                  await CacheConfig.clearCache();
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Cache cleared successfully'),
+                                        backgroundColor: Colors.green,
+                                      ),
+                                    );
+                                  }
+                                } catch (e) {
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Failed to clear cache'),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                  }
+                                }
+                              },
+                              child: const Text('Clear'),
+                            ),
+                          ],
+                        ),
                       );
                     },
                   ),

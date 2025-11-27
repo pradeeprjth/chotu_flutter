@@ -284,7 +284,7 @@ For questions, please contact support@chotu.com''',
             return Center(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
-                child: Container(
+                child: SizedBox(
                   width: isWeb ? 400 : double.infinity,
                   child: Card(
                     child: Padding(

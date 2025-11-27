@@ -308,7 +308,7 @@ class _DeliveryOrdersScreenState extends ConsumerState<DeliveryOrdersScreen>
                   style: AppTypography.bodySmall,
                 ),
                 value: deliveryState.isAvailable,
-                activeColor: AppColors.primary,
+                activeThumbColor: AppColors.primary,
                 onChanged: deliveryState.isLoadingProfile
                     ? null
                     : (value) async {

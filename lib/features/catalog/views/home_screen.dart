@@ -162,7 +162,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        // Show all categories
+                        context.push('/categories');
                       },
                       child: const Text('See All'),
                     ),

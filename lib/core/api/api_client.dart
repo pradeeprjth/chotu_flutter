@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'api_config.dart';
+import 'cache_config.dart';
 
 class ApiClient {
   late final Dio _dio;
@@ -17,6 +19,11 @@ class ApiClient {
         'Accept': 'application/json',
       },
     ));
+
+    // Add cache interceptor FIRST (before auth interceptor)
+    _dio.interceptors.add(
+      DioCacheInterceptor(options: CacheConfig.defaultCacheOptions),
+    );
 
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
@@ -90,24 +97,57 @@ class ApiClient {
   }
 
   // HTTP methods
-  Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) {
-    return _dio.get(path, queryParameters: queryParameters);
+  Future<Response> get(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    CacheOptions? cacheOptions,
+  }) {
+    return _dio.get(
+      path,
+      queryParameters: queryParameters,
+      options: Options(
+        extra: cacheOptions?.toExtra() ?? path.cacheOptions.toExtra(),
+      ),
+    );
   }
 
   Future<Response> post(String path, {dynamic data}) {
-    return _dio.post(path, data: data);
+    return _dio.post(
+      path,
+      data: data,
+      options: Options(
+        extra: CacheConfig.noCacheOptions.toExtra(),
+      ),
+    );
   }
 
   Future<Response> put(String path, {dynamic data}) {
-    return _dio.put(path, data: data);
+    return _dio.put(
+      path,
+      data: data,
+      options: Options(
+        extra: CacheConfig.noCacheOptions.toExtra(),
+      ),
+    );
   }
 
   Future<Response> patch(String path, {dynamic data}) {
-    return _dio.patch(path, data: data);
+    return _dio.patch(
+      path,
+      data: data,
+      options: Options(
+        extra: CacheConfig.noCacheOptions.toExtra(),
+      ),
+    );
   }
 
   Future<Response> delete(String path) {
-    return _dio.delete(path);
+    return _dio.delete(
+      path,
+      options: Options(
+        extra: CacheConfig.noCacheOptions.toExtra(),
+      ),
+    );
   }
 
   // Multipart upload for images
